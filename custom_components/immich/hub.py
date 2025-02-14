@@ -17,15 +17,16 @@ _ALLOWED_MIME_TYPES = ["image/png", "image/jpeg"]
 class ImmichHub:
     """Immich API hub."""
 
-    def __init__(self, host: str, api_key: str) -> None:
+    def __init__(self, host: str, verify_ssl: bool,api_key: str) -> None:
         """Initialize."""
         self.host = host
+        self.verify_ssl = verify_ssl
         self.api_key = api_key
 
     async def authenticate(self) -> bool:
         """Test if we can authenticate with the host."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, "/api/auth/validateToken")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
