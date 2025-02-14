@@ -8,7 +8,7 @@ import random
 
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_API_KEY, CONF_HOST
+from homeassistant.const import CONF_API_KEY, CONF_HOST, CONF_VERIFY_SSL
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -31,7 +31,7 @@ async def async_setup_entry(
     """Set up Immich image platform."""
 
     hub = ImmichHub(
-        host=config_entry.data[CONF_HOST], api_key=config_entry.data[CONF_API_KEY]
+        host=config_entry.data[CONF_HOST], verify_ssl=config_entry.data[CONF_VERIFY_SSL], api_key=config_entry.data[CONF_API_KEY]
     )
 
     # Create entity for random favorite image

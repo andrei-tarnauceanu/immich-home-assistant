@@ -4,6 +4,7 @@
       "user": {
         "data": {
           "host": "[%key:common::config_flow::data::host%]",
+          "verify_ssl": "[%key:common::config_flow::data::verify_ssl%]",
           "api_key": "[%key:common::config_flow::data::api_key%]"
         }
       }

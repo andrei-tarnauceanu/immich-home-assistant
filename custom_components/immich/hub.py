@@ -17,15 +17,16 @@ _ALLOWED_MIME_TYPES = ["image/png", "image/jpeg"]
 class ImmichHub:
     """Immich API hub."""
 
-    def __init__(self, host: str, api_key: str) -> None:
+    def __init__(self, host: str, verify_ssl: bool,api_key: str) -> None:
         """Initialize."""
         self.host = host
+        self.verify_ssl = verify_ssl
         self.api_key = api_key
 
     async def authenticate(self) -> bool:
         """Test if we can authenticate with the host."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, "/api/auth/validateToken")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
@@ -50,7 +51,7 @@ class ImmichHub:
     async def get_my_user_info(self) -> dict:
         """Get user info."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, "/api/users/me")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
@@ -70,7 +71,7 @@ class ImmichHub:
     async def get_asset_info(self, asset_id: str) -> dict | None:
         """Get asset info."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, f"/api/assets/{asset_id}")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
@@ -90,7 +91,7 @@ class ImmichHub:
     async def download_asset(self, asset_id: str) -> bytes | None:
         """Download the asset."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, f"/api/assets/{asset_id}/original")
                 headers = {_HEADER_API_KEY: self.api_key}
 
@@ -113,7 +114,7 @@ class ImmichHub:
     async def list_favorite_images(self) -> list[dict]:
         """List all favorite images."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, "/api/search/metadata")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
                 data = {"isFavorite": "true"}
@@ -139,7 +140,7 @@ class ImmichHub:
     async def list_all_albums(self) -> list[dict]:
         """List all albums."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, "/api/albums")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
@@ -159,7 +160,7 @@ class ImmichHub:
     async def list_album_images(self, album_id: str) -> list[dict]:
         """List all images in an album."""
         try:
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=self.verify_ssl)) as session:
                 url = urljoin(self.host, f"/api/albums/{album_id}")
                 headers = {"Accept": "application/json", _HEADER_API_KEY: self.api_key}
 
